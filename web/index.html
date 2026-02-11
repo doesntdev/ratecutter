@@ -9,6 +9,22 @@
   </head>
   <body>
     <div id="root"></div>
+    <div id="debug"></div>
+    <script>
+      window.onerror = function(msg, url, line) {
+        const d = document.getElementById('debug');
+        if (d) d.innerHTML = '<div style="padding:20px;background:#fee;font-family:system-ui"><h2>Error</h2><pre>' + msg + '\nLine: ' + line + '</pre></div>';
+      };
+    </script>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      setTimeout(function() {
+        const root = document.getElementById('root');
+        const debug = document.getElementById('debug');
+        if ((!root || root.children.length === 0) && debug) {
+          debug.innerHTML = '<div style="padding:20px;background:#ff9;font-family:system-ui"><h2>Debug: Not mounted</h2><p>Root: ' + (root ? 'exists, children=' + root.children.length : 'missing') + '</p><p>UserAgent: ' + navigator.userAgent + '</p></div>';
+        }
+      }, 3000);
+    </script>
   </body>
 </html>
