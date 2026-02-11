@@ -75,8 +75,27 @@ export default function ResultsDisplay({ results, onRestart, onSave }) {
         </div>
       )}
 
+      {/* Floor Rate Message - Rate below 2.75% */}
+      {effectiveRate < 2.75 && (
+        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl shadow-md p-6 mb-6 border border-green-200">
+          <div className="text-center">
+            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <p className="text-green-800 font-semibold text-lg mb-2">
+              You've got a great rate already!
+            </p>
+            <p className="text-green-700">
+              But let's see how we can make it even better.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* No Savings Message */}
-      {savings.monthly <= 0 && (
+      {savings.monthly <= 0 && effectiveRate >= 2.75 && (
         <div className="bg-green-50 rounded-xl p-6 mb-6 border border-green-200">
           <p className="text-center text-green-800 font-medium">
             You're already getting a competitive rate!
@@ -87,14 +106,14 @@ export default function ResultsDisplay({ results, onRestart, onSave }) {
         </div>
       )}
 
-      {/* CTA Buttons */}
+      {/* CTA Buttons - Show Save button if there's savings OR if rate is below floor */}
       <div className="space-y-3">
-        {savings.monthly > 0 && (
+        {(savings.monthly > 0 || effectiveRate < 2.75) && (
           <button
             onClick={onSave}
             className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Save My Proposal
+            {effectiveRate < 2.75 ? "Let's Optimize Further" : "Save My Proposal"}
           </button>
         )}
         <button
