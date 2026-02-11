@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { supabase } from '../lib/supabase';
 
 export default function LeadCapture({ calculationData, onSaved }) {
   const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ export default function LeadCapture({ calculationData, onSaved }) {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,14 +22,34 @@ export default function LeadCapture({ calculationData, onSaved }) {
     if (!formData.email) return;
 
     setIsSubmitting(true);
+    setError(null);
     
-    // Simulate API call - in production this would save to Supabase
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Save to Supabase
+    const { error: supabaseError } = await supabase
+      .from('leads')
+      .insert([{
+        email: formData.email,
+        name: formData.name,
+        phone: formData.phone,
+        business_name: formData.businessName,
+        monthly_volume: calculationData?.input?.monthlyVolume,
+        monthly_fees: calculationData?.input?.monthlyFees,
+        effective_rate: calculationData?.effectiveRate,
+        proposed_rate: calculationData?.proposedRate,
+        monthly_savings: calculationData?.savings?.monthly,
+        annual_savings: calculationData?.savings?.annual,
+        business_type: calculationData?.input?.businessType
+      }]);
+
+    if (supabaseError) {
+      console.error('Error saving lead:', supabaseError);
+      setError('Failed to save. Please try again.');
+      setIsSubmitting(false);
+      return;
+    }
     
-    console.log('Lead captured:', { ...formData, calculationData });
     setIsSubmitting(false);
     setIsSubmitted(true);
-    
     if (onSaved) onSaved();
   };
 
@@ -40,11 +62,9 @@ export default function LeadCapture({ calculationData, onSaved }) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-slate-800 mb-2">
-            Proposal Saved!
-          </h2>
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">Proposal Saved!</h2>
           <p className="text-slate-600">
-            We've emailed your personalized savings proposal to {formData.email}
+            We'll be in touch soon with your personalized savings proposal.
           </p>
         </div>
         <button
@@ -60,19 +80,19 @@ export default function LeadCapture({ calculationData, onSaved }) {
   return (
     <div className="max-w-md mx-auto p-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-slate-800 mb-2">
-          Save Your Proposal
-        </h2>
-        <p className="text-slate-600">
-          Enter your email to receive your personalized savings proposal
-        </p>
+        <h2 className="text-2xl font-bold text-slate-800 mb-2">Save Your Proposal</h2>
+        <p className="text-slate-600">Enter your email to receive your personalized savings proposal</p>
       </div>
-
+      
+      {error && (
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+          {error}
+        </div>
+      )}
+      
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">
-            Email *
-          </label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Email *</label>
           <input
             type="email"
             name="email"
@@ -83,11 +103,8 @@ export default function LeadCapture({ calculationData, onSaved }) {
             className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
           />
         </div>
-
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">
-            Your Name
-          </label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Your Name</label>
           <input
             type="text"
             name="name"
@@ -97,11 +114,8 @@ export default function LeadCapture({ calculationData, onSaved }) {
             className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
           />
         </div>
-
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">
-            Phone Number
-          </label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Phone Number</label>
           <input
             type="tel"
             name="phone"
@@ -111,11 +125,8 @@ export default function LeadCapture({ calculationData, onSaved }) {
             className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
           />
         </div>
-
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">
-            Business Name
-          </label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Business Name</label>
           <input
             type="text"
             name="businessName"
@@ -125,7 +136,6 @@ export default function LeadCapture({ calculationData, onSaved }) {
             className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
           />
         </div>
-
         <button
           type="submit"
           disabled={isSubmitting}
@@ -134,10 +144,8 @@ export default function LeadCapture({ calculationData, onSaved }) {
           {isSubmitting ? 'Saving...' : 'Save My Proposal'}
         </button>
       </form>
-
       <p className="text-xs text-center text-slate-400 mt-4">
-        By submitting, you agree to receive emails about your proposal. 
-        We never share your information.
+        By submitting, you agree to receive emails about your proposal. We never share your information.
       </p>
     </div>
   );
