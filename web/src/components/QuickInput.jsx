@@ -8,7 +8,6 @@ export default function QuickInput({ onSubmit }) {
     avgTicket: '',
     monthlyFees: ''
   });
-
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
@@ -44,81 +43,64 @@ export default function QuickInput({ onSubmit }) {
 
   return (
     <div className="max-w-md mx-auto p-6">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-slate-800 mb-2">
-          RateCutter
-        </h2>
-        <p className="text-slate-600">
-          See how much you could save on credit card processing
-        </p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">
-            Business Type
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Business Type</label>
           <select
             name="businessType"
             value={formData.businessType}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all"
           >
             <option value="">Select business type</option>
-            {BUSINESS_TYPES.map(t => (
-              <option key={t.value} value={t.value}>{t.label}</option>
+            {BUSINESS_TYPES.map(type => (
+              <option key={type.value} value={type.value}>{type.icon} {type.label}</option>
             ))}
           </select>
           {errors.businessType && <p className="text-red-500 text-sm mt-1">{errors.businessType}</p>}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">
-            Monthly Card Sales Volume ($)
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Monthly Card Sales Volume ($)</label>
           <input
             type="number"
             name="monthlyVolume"
             value={formData.monthlyVolume}
             onChange={handleChange}
             placeholder="e.g., 50000"
-            className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all"
           />
           {errors.monthlyVolume && <p className="text-red-500 text-sm mt-1">{errors.monthlyVolume}</p>}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">
-            Average Ticket Size ($)
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Average Ticket Size ($)</label>
           <input
             type="number"
             name="avgTicket"
             value={formData.avgTicket}
             onChange={handleChange}
             placeholder="e.g., 75"
-            className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">
-            Total Monthly Processing Fees ($)
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Total Monthly Processing Fees ($)</label>
           <input
             type="number"
             name="monthlyFees"
             value={formData.monthlyFees}
             onChange={handleChange}
             placeholder="e.g., 1500"
-            className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary transition-all"
           />
           {errors.monthlyFees && <p className="text-red-500 text-sm mt-1">{errors.monthlyFees}</p>}
         </div>
 
         <button
           type="submit"
-          className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+          className="w-full py-4 bg-brand-primary hover:bg-brand-dark text-white font-bold text-lg rounded-lg transition-all shadow-md hover:shadow-lg"
         >
           Calculate My Savings
         </button>

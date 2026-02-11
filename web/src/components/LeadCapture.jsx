@@ -23,8 +23,7 @@ export default function LeadCapture({ calculationData, onSaved }) {
 
     setIsSubmitting(true);
     setError(null);
-    
-    // Save to Supabase
+
     const { error: supabaseError } = await supabase
       .from('leads')
       .insert([{
@@ -42,12 +41,11 @@ export default function LeadCapture({ calculationData, onSaved }) {
       }]);
 
     if (supabaseError) {
-      console.error('Error saving lead:', supabaseError);
       setError('Failed to save. Please try again.');
       setIsSubmitting(false);
       return;
     }
-    
+
     setIsSubmitting(false);
     setIsSubmitted(true);
     if (onSaved) onSaved();
@@ -58,18 +56,16 @@ export default function LeadCapture({ calculationData, onSaved }) {
       <div className="max-w-md mx-auto p-6 text-center">
         <div className="mb-6">
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-8 h-8 text-brand-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-slate-800 mb-2">Proposal Saved!</h2>
-          <p className="text-slate-600">
-            We'll be in touch soon with your personalized savings proposal.
-          </p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Proposal Saved!</h2>
+          <p className="text-gray-600">We'll be in touch soon with your personalized savings proposal.</p>
         </div>
         <button
           onClick={() => window.location.reload()}
-          className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700"
+          className="w-full py-3 bg-brand-primary hover:bg-brand-dark text-white font-semibold rounded-lg transition-colors"
         >
           Calculate Another
         </button>
@@ -80,19 +76,19 @@ export default function LeadCapture({ calculationData, onSaved }) {
   return (
     <div className="max-w-md mx-auto p-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-slate-800 mb-2">Save Your Proposal</h2>
-        <p className="text-slate-600">Enter your email to receive your personalized savings proposal</p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Save Your Proposal</h2>
+        <p className="text-gray-600">Enter your email to receive your personalized savings proposal</p>
       </div>
-      
+
       {error && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           {error}
         </div>
       )}
-      
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Email *</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
           <input
             type="email"
             name="email"
@@ -100,51 +96,56 @@ export default function LeadCapture({ calculationData, onSaved }) {
             onChange={handleChange}
             required
             placeholder="you@business.com"
-            className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
           />
         </div>
+
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Your Name</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
           <input
             type="text"
             name="name"
             value={formData.name}
             onChange={handleChange}
             placeholder="John Smith"
-            className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
           />
         </div>
+
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Phone Number</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
           <input
             type="tel"
             name="phone"
             value={formData.phone}
             onChange={handleChange}
             placeholder="(555) 123-4567"
-            className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
           />
         </div>
+
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Business Name</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
           <input
             type="text"
             name="businessName"
             value={formData.businessName}
             onChange={handleChange}
             placeholder="Your Business LLC"
-            className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
           />
         </div>
+
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+          className="w-full py-3 bg-brand-primary hover:bg-brand-dark text-white font-semibold rounded-lg transition-colors disabled:opacity-50"
         >
           {isSubmitting ? 'Saving...' : 'Save My Proposal'}
         </button>
       </form>
-      <p className="text-xs text-center text-slate-400 mt-4">
+
+      <p className="text-xs text-center text-gray-400 mt-4">
         By submitting, you agree to receive emails about your proposal. We never share your information.
       </p>
     </div>
