@@ -37,8 +37,29 @@ export default function ResultsDisplay({ results, onRestart, onSave }) {
         <p className="text-center text-gray-600 text-sm">{benchmark.message}</p>
       </div>
 
-      {/* Floor Rate Message - Rate below 2.75% */}
-      {effectiveRate < 2.75 && (
+      {/* Savings Proposal */}
+      {savings.monthly > 0 && (
+        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl shadow-md p-6 mb-6 border border-green-200">
+          <div className="text-center mb-4">
+            <p className="text-sm text-brand-dark uppercase tracking-wide mb-1">Proposed Rate</p>
+            <div className="text-4xl font-bold text-brand-dark">{formatPercentage(proposedRate)}</div>
+            <p className="text-brand-dark text-sm mt-1">Save {formatPercentage(savings.rateDifference)} on every transaction</p>
+          </div>
+          <div className="grid grid-cols-2 gap-4 mt-6">
+            <div className="text-center p-3 bg-white rounded-lg">
+              <p className="text-sm text-gray-500 mb-1">Monthly Savings</p>
+              <p className="text-2xl font-bold text-brand-dark">{formatCurrency(savings.monthly)}</p>
+            </div>
+            <div className="text-center p-3 bg-white rounded-lg">
+              <p className="text-sm text-gray-500 mb-1">Annual Savings</p>
+              <p className="text-2xl font-bold text-brand-dark">{formatCurrency(savings.annual)}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Floor Rate Message - Rate below 2.75% with no savings */}
+      {effectiveRate < 2.75 && savings.monthly <= 0 && (
         <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl shadow-md p-6 mb-6 border border-green-200">
           <div className="text-center">
             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -52,7 +73,7 @@ export default function ResultsDisplay({ results, onRestart, onSave }) {
         </div>
       )}
 
-      {/* No Savings Message */}
+      {/* No Savings Message for rates >= 2.75% */}
       {savings.monthly <= 0 && effectiveRate >= 2.75 && (
         <div className="bg-green-50 rounded-xl p-6 mb-6 border border-green-200">
           <p className="text-center text-brand-dark font-medium">You're already getting a competitive rate!</p>
