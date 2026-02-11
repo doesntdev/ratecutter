@@ -82,7 +82,7 @@ function App() {
             RateCutter - Helping merchants find better processing rates
           </p>
           <p className="text-slate-400 text-xs mt-2">
-            © 2024 RateCutter. All calculations are estimates.
+            © 2026 RateCutter. All calculations are estimates.
           </p>
         </div>
       </footer>
